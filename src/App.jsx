@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import UserList from "./components/userList/UserList";
 import UserDetails from "./components/userDetails/UserDetails";
 import { createContext, useEffect, useState } from "react";
+import { AddUser } from "./components/addUser/AddUser";
 export const userContext = createContext(null);
 
 function App() {
@@ -20,6 +21,10 @@ function App() {
     {
       path: "/:id",
       element: <UserDetails />,
+    },
+    {
+      path: "/addUser",
+      element: <AddUser />,
     },
   ]);
   return (
