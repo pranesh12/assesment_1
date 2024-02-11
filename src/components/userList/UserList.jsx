@@ -5,6 +5,10 @@ import Navbar from "../navbar/Navbar";
 
 const UserList = () => {
   const { users, setUsers } = useContext(userContext);
+  const Lusers = localStorage.getItem("users")
+    ? JSON.parse(localStorage.getItem("users"))
+    : users;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [SortBy, setSortBy] = useState(null);
 
@@ -13,13 +17,12 @@ const UserList = () => {
   );
 
   const handleSort = (key) => {
-    console.log(key);
     const sortedUsers = [...users].sort((a, b) => a[key].localeCompare(b[key]));
     setUsers(sortedUsers);
-    // setSortBy(key);
+    setSortBy(key);
   };
 
-  const usersData = searchQuery == "" ? users : seacrchData;
+  const usersData = searchQuery == "" ? Lusers : seacrchData;
   return (
     <>
       <Navbar />
@@ -48,19 +51,22 @@ const UserList = () => {
           </select>
         </div>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-          {usersData &&
-            usersData.map((user) => {
+          {users &&
+            users.map((user) => {
               return (
                 <div className="col" key={user.id}>
                   <div className="card shadow  bg-body-tertiary">
-                    <Link to={`/${user.id}`}>
-                      <img src={user.image} className="card-img-top" />
-                    </Link>
+                    <img src={user.image} className="card-img-top " />
 
                     <div className="card-body">
-                      <h6 className="card-title">
-                        {user.firstName} {user.lastName}
-                      </h6>
+                      <Link
+                        style={{ textDecoration: "none", color: "orange" }}
+                        to={`/${user.id}`}
+                      >
+                        <h6 className="card-title">
+                          {user.firstName} {user.lastName}
+                        </h6>
+                      </Link>
                       <p className="card-text">Email : {user.email}</p>
                       <p className="card-text">
                         Address : {user.address.address},state:

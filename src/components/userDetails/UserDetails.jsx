@@ -4,16 +4,19 @@ import { userContext } from "../../App";
 
 const UserDetails = () => {
   const { users } = useContext(userContext);
+  const lusers = localStorage.getItem("users")
+    ? JSON.parse(localStorage.getItem("users"))
+    : users;
   const { id } = useParams();
-  const user = users.filter((user) => user.id == id);
+  const user = lusers.filter((user) => user.id == id);
 
   return (
     <div>
       <div className="container mt-5">
         {user[0] && (
           <div className="card mb-3">
-            <div className="mx-auto">
-              <img src={user[0].image} className="img-fluid" />
+            <div className="mx-auto ">
+              <img src={user[0].image} className="img-thumbnail" />
             </div>
 
             <div className="card-body">
