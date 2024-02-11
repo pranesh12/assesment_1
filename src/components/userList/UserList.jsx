@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
 import { userContext } from "../../App";
-import { Link } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
+import Usercard from "../userCard/Usercard";
 
 const UserList = () => {
   const { users, setUsers } = useContext(userContext);
+  const [renderBySort, setRenderBySort] = useState(false);
   const Lusers = localStorage.getItem("users")
     ? JSON.parse(localStorage.getItem("users"))
     : users;
@@ -17,9 +18,15 @@ const UserList = () => {
   );
 
   const handleSort = (key) => {
+    setRenderBySort(true);
     const sortedUsers = [...users].sort((a, b) => a[key].localeCompare(b[key]));
     setUsers(sortedUsers);
     setSortBy(key);
+  };
+
+  const handleSearch = (e) => {
+    setRenderBySort(false);
+    setSearchQuery(e.target.value);
   };
 
   const usersData = searchQuery == "" ? Lusers : seacrchData;
@@ -31,7 +38,7 @@ const UserList = () => {
         <div className="mt-5 mb-5">
           <input
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearch}
             style={{ height: "3.5rem" }}
             className="form-control"
             type="text"
@@ -46,38 +53,18 @@ const UserList = () => {
             className="form-control"
           >
             <option value="firstName">Name</option>
-            <option value="email">email</option>
+            <option value="email">Email</option>
             <option value="company.name">Company Name</option>
           </select>
         </div>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-          {users &&
-            users.map((user) => {
-              return (
-                <div className="col" key={user.id}>
-                  <div className="card shadow  bg-body-tertiary">
-                    <img src={user.image} className="card-img-top " />
-
-                    <div className="card-body">
-                      <Link
-                        style={{ textDecoration: "none", color: "orange" }}
-                        to={`/${user.id}`}
-                      >
-                        <h6 className="card-title">
-                          {user.firstName} {user.lastName}
-                        </h6>
-                      </Link>
-                      <p className="card-text">Email : {user.email}</p>
-                      <p className="card-text">
-                        Address : {user.address.address},state:
-                        {user.address.state}, City : {user.address.city}
-                      </p>
-                      <p>Company name : {user.company.name}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          {renderBySort
+            ? users.map((user) => {
+                return <Usercard key={user.id} user={user} />;
+              })
+            : usersData.map((user) => {
+                return <Usercard key={user.id} user={user} />;
+              })}
         </div>
       </div>
     </>
