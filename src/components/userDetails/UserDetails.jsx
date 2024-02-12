@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { userContext } from "../../App";
 
 const UserDetails = () => {
@@ -13,6 +13,14 @@ const UserDetails = () => {
   return (
     <div>
       <div className="container mt-5">
+        <Link
+          style={{ color: "#F05D0E", textDecoration: "none" }}
+          className="pb-5"
+          to="/"
+        >
+          <p>Go back to home</p>
+        </Link>
+
         {user[0] && (
           <div className="card mb-3">
             <div className="mx-auto ">

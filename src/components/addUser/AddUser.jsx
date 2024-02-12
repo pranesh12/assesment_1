@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import Navbar from "../navbar/Navbar";
 import { userContext } from "../../App";
 import { v4 as uuidv4 } from "uuid";
 
@@ -42,7 +41,7 @@ export const AddUser = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newUser = {
-      id: uuidv4(),
+      id: uuidv4() + 1,
       image: formData.image,
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -64,14 +63,20 @@ export const AddUser = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData({ ...formData, image: URL.createObjectURL(file) });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          image: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   return (
     <>
-      <Navbar />
-      <div className="container mt-5">
+      <div className=" mt-5 mb-5 pb-5">
         {formData.image && (
           <div className="mt-5 mb-5 d-flex justify-content-center">
             <img
